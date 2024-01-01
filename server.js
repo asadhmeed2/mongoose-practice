@@ -155,6 +155,9 @@ and your server is running do the following:
 /*Books
 ----------------------*/
 //1. Find books with fewer than 500 but more than 200 pages
+Book.find({$and:[{pages:{$lt:500}},{pages:{$gt:200}}]}).then(function(books){
+  console.log(books.length);
+})
 
 //2. Find books whose rating is less than 5, and sort by the author's name
 
