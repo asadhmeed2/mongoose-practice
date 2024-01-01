@@ -6,7 +6,7 @@ const personSchema = new Schema({
     eyes: String,
     weight: Number,
     height: Number,
-    salary: String,
+    salary: Number,
     numKids: Number,
     kids: Array,
 })

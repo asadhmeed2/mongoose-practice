@@ -116,6 +116,10 @@ could you write it differently?
 Person.find({}).count().then(function(err, count) {
   // the below two loops could be changed to a simple:
   // for (var i = count; i < 100; i++) {}
+  if(!count){
+    count = 0
+  }
+
   if (count < 100) {
     for (var i = 0; i < 100 - count; i++) {
       var numKids = getNumKids();
@@ -156,22 +160,47 @@ and your server is running do the following:
 ----------------------*/
 //1. Find books with fewer than 500 but more than 200 pages
 Book.find({$and:[{pages:{$lt:500}},{pages:{$gt:200}}]}).then(function(books){
-  console.log(books.length);
+  // console.log(books.length);
 })
 
 //2. Find books whose rating is less than 5, and sort by the author's name
+Book.find({rating:{$lt:5}}).sort({author:-1}).then(function(books){
+  // console.log(books);
+})
 
 //3. Find all the Fiction books, skip the first 2, and display only 3 of them
+Book.find({genres:{$elemMatch:{$regex : "Fiction"}}}).skip(2).limit(3).then(function(books){
+  // console.log(books);
+})
 
 
 /*People
 ----------------------*/
 //1. Find all the people who are tall (>180) AND rich (>30000)
+Person.find({$and:[{height:{$gt:180}},{salary:{$gt:30000}}]}).then(function(people){
+  // console.log(people);
+})
+
 
 //2. Find all the people who are tall (>180) OR rich (>30000)
+Person.find({$or:[{height:{$gt:180}},{salary:{$gt:30000}}]}).then(function(people){
+  // console.log(people.length);
+})
 
 //3. Find all the people who have grey hair or eyes, and are skinny (<70)
+Person.find({$and:[{weight:{$lt:70}},{$or:[{hair:'gray'},{eyes:'gray'}]}]}).then(function(people){
+  // console.log(people);
+})
 
 //4. Find people who have at least 1 kid with grey hair
+Person.find({kids:{$elemMatch:{hair:'grey'}}}).then(function(people){
+  // console.log(people);
+})
 
 //5. Find all the people who have at least one overweight kid, and are overweight themselves (>100)
+Book.find().and([
+    {kids:{$elemMatch:{weight: {$gt: 100}}}},
+  {weight:{$gt: 100}}])
+  .then(function(people){
+    console.log(people);
+})
